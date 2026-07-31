@@ -1,0 +1,161 @@
+mysql> CREATE DATABASE exp_4;
+Query OK, 1 row affected (0.002 sec)
+
+mysql> USE exp_4;
+Database changed
+mysql> CREATE TABLE Department(
+    -> dep_ID INT PRIMARY KEY,
+    -> dep_Name VARCHAR(50) );
+Query OK, 0 rows affected (0.008 sec)
+
+mysql> CREATE TABLE Student(
+    -> stut_ID INT PRIMARY KEY,
+    -> stud_Name VARCHAR(50),
+    -> age INT,
+    -> dep_ID INT );
+Query OK, 0 rows affected (0.008 sec)
+
+mysql> INSERT INTO Department VALUES
+    -> (101, 'CSE'),
+    -> (102, 'IT'),
+    -> (103, 'ME');
+Query OK, 3 rows affected (0.004 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Student VALUES
+    -> (1, 'Manikant', 21, 101),
+    -> (2, 'Khushal', 20, 102),
+    -> (3, 'Manan', 19, 103),
+    -> (4, 'Nikhil', 19, 103),
+    -> (5, 'Nihal', 19, 104),
+    -> (6, 'Kunal', 20, 105),
+    -> (7, 'Krish', 18, 106),
+    -> (8, 'Parth', 18, 107);
+
+Query OK, 3 rows affected (0.003 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Department;
++--------+----------+
+| dep_ID | dep_Name |
++--------+----------+
+|    101 | CSE      |
+|    102 | IT       |
+|    103 | ME       |
++--------+----------+
+3 rows in set (0.000 sec)
+
+mysql> SELECT * FROM Student;
++---------+-----------+------+--------+
+| stut_ID | stud_Name | age  | dep_ID |
++---------+-----------+------+--------+
+|       1 | Manikant  |   21 |    101 |
+|       2 | Khushal   |   20 |    102 |
+|       3 | Manan     |   19 |    103 |
+|       4 | Nikhil    |   19 |    103 |
+|       5 | Nihal     |   19 |    104 |
+|       6 | Kunal     |   20 |    105 |
+|       7 | Krish     |   18 |    106 |
+|       8 | Parth     |   18 |    107 |
++---------+-----------+------+--------+
+8 rows in set (0.000 sec)
+
+mysql> SELECT Student.stud_Name, Department.dep_Name FROM Student INNER JOIN Department ON Student.dep_ID = Department.dep_ID;
++-----------+----------+
+| stud_Name | dep_Name |
++-----------+----------+
+| Manikant  | CSE      |
+| Khushal   | IT       |
+| Manan     | ME       |
+| Nikhil    | ME       |
++-----------+----------+
+4 rows in set (0.001 sec)
+
+mysql> SELECT Student.stud_Name, Department.dep_Name FROM Student LEFT JOIN Department ON Student.dep_ID = Department.dep_ID;
++-----------+----------+
+| stud_Name | dep_Name |
++-----------+----------+
+| Manikant  | CSE      |
+| Khushal   | IT       |
+| Manan     | ME       |
+| Nikhil    | ME       |
+| Nihal     | NULL     |
+| Kunal     | NULL     |
+| Krish     | NULL     |
+| Parth     | NULL     |
++-----------+----------+
+8 rows in set (0.001 sec)
+
+mysql> SELECT Student.stud_Name, Department.dep_Name FROM Student RIGHT JOIN Department ON Student.dep_ID = Department.dep_ID;
++-----------+----------+
+| stud_Name | dep_Name |
++-----------+----------+
+| Manikant  | CSE      |
+| Khushal   | IT       |
+| Nikhil    | ME       |
+| Manan     | ME       |
++-----------+----------+
+4 rows in set (0.001 sec)
+
+mysql> SELECT Student.stud_Name, Department.dep_Name FROM Student CROSS JOIN Department;
++-----------+----------+
+| stud_Name | dep_Name |
++-----------+----------+
+| Manikant  | ME       |
+| Manikant  | IT       |
+| Manikant  | CSE      |
+| Khushal   | ME       |
+| Khushal   | IT       |
+| Khushal   | CSE      |
+| Manan     | ME       |
+| Manan     | IT       |
+| Manan     | CSE      |
+| Nikhil    | ME       |
+| Nikhil    | IT       |
+| Nikhil    | CSE      |
+| Nihal     | ME       |
+| Nihal     | IT       |
+| Nihal     | CSE      |
+| Kunal     | ME       |
+| Kunal     | IT       |
+| Kunal     | CSE      |
+| Krish     | ME       |
+| Krish     | IT       |
+| Krish     | CSE      |
+| Parth     | ME       |
+| Parth     | IT       |
+| Parth     | CSE      |
++-----------+----------+
+24 rows in set (0.000 sec)
+
+mysql> SELECT Student.stud_Name, Department.dep_Name FROM Student RIGHT JOIN Department ON Student.dep_ID = Department.dep_ID 
+    -> UNION
+    -> SELECT Student.stud_Name, Department.dep_Name FROM Student LEFT JOIN Department ON Student.dep_ID = Department.dep_ID;
++-----------+----------+
+| stud_Name | dep_Name |
++-----------+----------+
+| Manikant  | CSE      |
+| Khushal   | IT       |
+| Nikhil    | ME       |
+| Manan     | ME       |
+| Nihal     | NULL     |
+| Kunal     | NULL     |
+| Krish     | NULL     |
+| Parth     | NULL     |
++-----------+----------+
+8 rows in set (0.001 sec)
+
+mysql> SELECT
+    -> S1.stud_Name AS Student1,
+    -> S2.stud_Name AS Student2,
+    -> S1.dep_ID
+    -> FROM Student S1
+    -> INNER JOIN Student S2
+    -> ON S1.dep_ID = S2.dep_ID
+    -> WHERE S1.stut_ID < S2.stut_ID;
++----------+----------+--------+
+| Student1 | Student2 | dep_ID |
++----------+----------+--------+
+| Manan    | Nikhil   |    103 |
++----------+----------+--------+
+1 row in set (0.001 sec)

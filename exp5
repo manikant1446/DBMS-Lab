@@ -1,0 +1,108 @@
+mysql> CREATE DATABASE 07Aug;
+Query OK, 1 row affected (0.003 sec)
+
+mysql> USE 07Aug;
+Database changed
+mysql> CREATE TABLE Department (
+    -> Dept_ID INT PRIMARY KEY,
+    -> Dept_Name VARCHAR(50));
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> CREATE TABLE Student (
+    -> Stud_ID INT PRIMARY KEY,
+    -> Stud_Name VARCHAR(50),
+    -> Age INT,
+    -> Dept_ID INT);
+Query OK, 0 rows affected (0.007 sec)
+
+mysql> INSERT INTO Department VALUES
+    ->     (101, 'CSE'),
+    ->     (102, 'IT'),
+    ->     (103, 'ME');
+Query OK, 3 rows affected (0.004 sec)
+
+
+mysql> INSERT INTO Student VALUES
+    ->     (1, 'Manikant', 21, 101),
+    ->     (2, 'Khushal', 20, 102),
+    ->     (3, 'Manan', 19, 103),
+    ->     (4, 'Keshav', 20, 104),
+    ->     (5, 'Nikhil', 16, 104),
+    ->     (6, 'Nihal', 17, 105),
+    ->     (7, 'Krish', 19, 105),
+    ->     (8, 'Parth', 18, 106);
+Query OK, 8 rows affected (0.002 sec)
+
+
+mysql> SELECT Student.Stud_ID,
+    ->        Student.Stud_Name,
+    ->        Department.Dept_Name
+    -> FROM Student
+    -> INNER JOIN Department
+    -> ON Student.Dept_ID = Department.Dept_ID;
++---------+-----------+-----------+
+| Stud_ID | Stud_Name | Dept_Name |
++---------+-----------+-----------+
+|       1 | Manikant  | CSE       |
+|       2 | Khushal   | IT        |
+|       3 | Manan     | ME        |
++---------+-----------+-----------+
+
+
+mysql> SELECT Student.Stud_ID,
+    ->        Student.Stud_Name,
+    ->        Department.Dept_Name
+    -> FROM Student, Department
+    -> WHERE Student.Dept_ID = Department.Dept_ID;
++---------+-----------+-----------+
+| Stud_ID | Stud_Name | Dept_Name |
++---------+-----------+-----------+
+|       1 | Manikant  | CSE       |
+|       2 | Khushal   | IT        |
+|       3 | Manan     | ME        |
++---------+-----------+-----------+
+
+
+mysql> SELECT Department.Dept_Name,
+    -> COUNT(Student.Stud_ID) AS Total_Students
+    -> FROM Student, Department
+    -> WHERE Student.Dept_ID = Department.Dept_ID
+    -> GROUP BY Department.Dept_Name;
++-----------+----------------+
+| Dept_Name | Total_Students |
++-----------+----------------+
+| CSE       |              1 |
+| IT        |              1 |
+| ME        |              1 |
++-----------+----------------+
+3 rows in set (0.001 sec)
+
+
+mysql> SELECT Department.Dept_Name,
+    -> SUM(Student.Age) AS Total_Age
+    -> FROM Student, Department
+    -> WHERE Student.Dept_ID = Department.Dept_ID
+    -> GROUP BY Department.Dept_Name;
++-----------+-----------+
+| Dept_Name | Total_Age |
++-----------+-----------+
+| CSE       |        21 |
+| IT        |        20 |
+| ME        |        19 |
++-----------+-----------+
+3 rows in set (0.001 sec)
+
+
+mysql> SELECT Department.Dept_Name,
+    -> MAX(Student.Age) AS Maximum_Age
+    -> FROM Student, Department
+    -> WHERE Student.Dept_ID = Department.Dept_ID
+    -> GROUP BY Department.Dept_Name;
++-----------+-------------+
+| Dept_Name | Maximum_Age |
++-----------+-------------+
+| CSE       |          21 |
+| IT        |          20 |
+| ME        |          19 |
++-----------+-------------+
+3 rows in set (0.003 sec)

@@ -2,6 +2,8 @@ mysql> CREATE DATABASE 14aug;
 
 mysql> USE 14aug;
 Database changed
+
+-----DCL 
 mysql> CREATE TABLE employee(empId INT PRIMARY KEY ,empName VARCHAR(50),department VARCHAR(30),salary DECIMAL(10,2));
 
 mysql> INSERT INTO employee VALUES
@@ -49,3 +51,23 @@ mysql> SELECT * FROM employee;
 |     2 | Rahul   | HR         | 40000.00 |
 |     3 | Neha    | Finance    | 50000.00 |
 +-------+---------+------------+----------+
+
+-----TCL commands
+mysql> CREATE USER 'student1'@'localhost'IDENTIFIED BY 'student123';
+mysql> GRANT SELECT, INSERT ON college.*TO 'student1'@'localhost';
+mysql> SHOW GRANTS FOR 'student1'@'localhost';
++-----------------------------------------------------------------------------------------------------------------+
+| Grants for student1@localhost                                                                                   |
++-----------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO 'student1'@'localhost' IDENTIFIED BY PASSWORD '*AF8B0FA3E4FD603D634F62731916EC4031BFA25A' |
+| GRANT SELECT, INSERT ON `college`.* TO 'student1'@'localhost'                                                   |
++-----------------------------------------------------------------------------------------------------------------+
+
+mysql> REVOKE INSERT ON college.*FROM 'student1'@'localhost';
+mysql> SHOW GRANTS FOR 'student1'@'localhost';
++-----------------------------------------------------------------------------------------------------------------+
+| Grants for student1@localhost                                                                                   |
++-----------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO 'student1'@'localhost' IDENTIFIED BY PASSWORD '*AF8B0FA3E4FD603D634F62731916EC4031BFA25A' |
+| GRANT SELECT ON `college`.* TO 'student1'@'localhost'                                                           |
++-----------------------------------------------------------------------------------------------------------------+

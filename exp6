@@ -1,0 +1,51 @@
+mysql> CREATE DATABASE 14aug;
+
+mysql> USE 14aug;
+Database changed
+mysql> CREATE TABLE employee(empId INT PRIMARY KEY ,empName VARCHAR(50),department VARCHAR(30),salary DECIMAL(10,2));
+
+mysql> INSERT INTO employee VALUES
+    -> (1, 'Amit', 'IT', 45000.00),(2, 'Rahul', 'HR', 40000.00),(3, 'Neha', 'Finance', 50000.00);
+
+mysql> START TRANSACTION;
+
+mysql> UPDATE employee
+    -> SET salary = salary + 5000
+    -> WHERE empId = 1;
+
+mysql> COMMIT;
+
+mysql> SELECT * FROM employee;
++-------+---------+------------+----------+
+| empId | empName | department | salary   |
++-------+---------+------------+----------+
+|     1 | Amit    | IT         | 50000.00 |
+|     2 | Rahul   | HR         | 40000.00 |
+|     3 | Neha    | Finance    | 50000.00 |
++-------+---------+------------+----------+
+
+mysql> START TRANSACTION;
+
+mysql> UPDATE employee
+    -> SET salary =salary + 1000
+    -> WHERE empId = 2;
+
+mysql> SELECT * FROM employee;
++-------+---------+------------+----------+
+| empId | empName | department | salary   |
++-------+---------+------------+----------+
+|     1 | Amit    | IT         | 50000.00 |
+|     2 | Rahul   | HR         | 41000.00 |
+|     3 | Neha    | Finance    | 50000.00 |
++-------+---------+------------+----------+
+
+mysql> ROLLBACK;
+
+mysql> SELECT * FROM employee;
++-------+---------+------------+----------+
+| empId | empName | department | salary   |
++-------+---------+------------+----------+
+|     1 | Amit    | IT         | 50000.00 |
+|     2 | Rahul   | HR         | 40000.00 |
+|     3 | Neha    | Finance    | 50000.00 |
++-------+---------+------------+----------+

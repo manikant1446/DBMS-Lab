@@ -1,13 +1,29 @@
-mysql> CREATE DATABASE 14aug;
+mysql> CREATE DATABASE 17aug;
 
-mysql> USE 14aug;
+mysql> USE 17aug;
 Database changed
 
------DCL 
-mysql> CREATE TABLE employee(empId INT PRIMARY KEY ,empName VARCHAR(50),department VARCHAR(30),salary DECIMAL(10,2));
+mysql> CREATE TABLE employee
+    -> (empId INT PRIMARY KEY,
+    -> empName VARCHAR(50),
+    -> department VARCHAR(30),
+    -> salary DECIMAL(10,2));
 
-mysql> INSERT INTO employee VALUES
-    -> (1, 'Amit', 'IT', 45000.00),(2, 'Rahul', 'HR', 40000.00),(3, 'Neha', 'Finance', 50000.00);
+mysql> INSERT INTO employee VALUES (1, 'Manikant', 'CSE', 45000.00), (2, 'Khushal', 'CSE', 5000),
+    -> (3, 'Manan', 'IT', 50000.00),
+    -> (4, 'Nikhil', 'CSE-R', 2000),
+    -> (5, 'Nihal', 'ME', 2000);
+
+mysql> SELECT * FROM employee;
++-------+----------+------------+----------+
+| empId | empName  | department | salary   |
++-------+----------+------------+----------+
+|     1 | Manikant | CSE        | 45000.00 |
+|     2 | Khushal  | CSE        |  5000.00 |
+|     3 | Manan    | IT         | 50000.00 |
+|     4 | Nikhil   | CSE-R      |  2000.00 |
+|     5 | Nihal    | ME         |  2000.00 |
++-------+----------+------------+----------+
 
 mysql> START TRANSACTION;
 
@@ -18,13 +34,15 @@ mysql> UPDATE employee
 mysql> COMMIT;
 
 mysql> SELECT * FROM employee;
-+-------+---------+------------+----------+
-| empId | empName | department | salary   |
-+-------+---------+------------+----------+
-|     1 | Amit    | IT         | 50000.00 |
-|     2 | Rahul   | HR         | 40000.00 |
-|     3 | Neha    | Finance    | 50000.00 |
-+-------+---------+------------+----------+
++-------+----------+------------+----------+
+| empId | empName  | department | salary   |
++-------+----------+------------+----------+
+|     1 | Manikant | CSE        | 50000.00 |
+|     2 | Khushal  | CSE        |  5000.00 |
+|     3 | Manan    | IT         | 50000.00 |
+|     4 | Nikhil   | CSE-R      |  2000.00 |
+|     5 | Nihal    | ME         |  2000.00 |
++-------+----------+------------+----------+
 
 mysql> START TRANSACTION;
 
@@ -33,41 +51,92 @@ mysql> UPDATE employee
     -> WHERE empId = 2;
 
 mysql> SELECT * FROM employee;
-+-------+---------+------------+----------+
-| empId | empName | department | salary   |
-+-------+---------+------------+----------+
-|     1 | Amit    | IT         | 50000.00 |
-|     2 | Rahul   | HR         | 41000.00 |
-|     3 | Neha    | Finance    | 50000.00 |
-+-------+---------+------------+----------+
++-------+----------+------------+----------+
+| empId | empName  | department | salary   |
++-------+----------+------------+----------+
+|     1 | Manikant | CSE        | 50000.00 |
+|     2 | Khushal  | CSE        |  6000.00 |
+|     3 | Manan    | IT         | 50000.00 |
+|     4 | Nikhil   | CSE-R      |  2000.00 |
+|     5 | Nihal    | ME         |  2000.00 |
++-------+----------+------------+----------+
 
 mysql> ROLLBACK;
 
 mysql> SELECT * FROM employee;
-+-------+---------+------------+----------+
-| empId | empName | department | salary   |
-+-------+---------+------------+----------+
-|     1 | Amit    | IT         | 50000.00 |
-|     2 | Rahul   | HR         | 40000.00 |
-|     3 | Neha    | Finance    | 50000.00 |
-+-------+---------+------------+----------+
++-------+----------+------------+----------+
+| empId | empName  | department | salary   |
++-------+----------+------------+----------+
+|     1 | Manikant | CSE        | 50000.00 |
+|     2 | Khushal  | CSE        |  5000.00 |
+|     3 | Manan    | IT         | 50000.00 |
+|     4 | Nikhil   | CSE-R      |  2000.00 |
+|     5 | Nihal    | ME         |  2000.00 |
++-------+----------+------------+----------+
 
------TCL commands
-mysql> CREATE USER 'student1'@'localhost'IDENTIFIED BY 'student123';
-mysql> GRANT SELECT, INSERT ON college.*TO 'student1'@'localhost';
-mysql> SHOW GRANTS FOR 'student1'@'localhost';
-+-----------------------------------------------------------------------------------------------------------------+
-| Grants for student1@localhost                                                                                   |
-+-----------------------------------------------------------------------------------------------------------------+
-| GRANT USAGE ON *.* TO 'student1'@'localhost' IDENTIFIED BY PASSWORD '*AF8B0FA3E4FD603D634F62731916EC4031BFA25A' |
-| GRANT SELECT, INSERT ON `college`.* TO 'student1'@'localhost'                                                   |
-+-----------------------------------------------------------------------------------------------------------------+
+mysql> START TRANSACTION;
 
-mysql> REVOKE INSERT ON college.*FROM 'student1'@'localhost';
-mysql> SHOW GRANTS FOR 'student1'@'localhost';
-+-----------------------------------------------------------------------------------------------------------------+
-| Grants for student1@localhost                                                                                   |
-+-----------------------------------------------------------------------------------------------------------------+
-| GRANT USAGE ON *.* TO 'student1'@'localhost' IDENTIFIED BY PASSWORD '*AF8B0FA3E4FD603D634F62731916EC4031BFA25A' |
-| GRANT SELECT ON `college`.* TO 'student1'@'localhost'                                                           |
-+-----------------------------------------------------------------------------------------------------------------+
+mysql> UPDATE employee
+    -> SET salary =salary + 789
+    -> WHERE empId = 3;
+
+mysql> SAVEPOINT sp1;
+
+mysql> UPDATE employee
+    -> SET salary =salary - 234
+    -> WHERE empId = 4;
+
+mysql> UPDATE employee
+    -> SET salary =salary - 600
+    -> WHERE empId = 5;
+
+mysql> SELECT * FROM employee;
++-------+----------+------------+----------+
+| empId | empName  | department | salary   |
++-------+----------+------------+----------+
+|     1 | Manikant | CSE        | 50000.00 |
+|     2 | Khushal  | CSE        |  5000.00 |
+|     3 | Manan    | IT         | 50789.00 |
+|     4 | Nikhil   | CSE-R      |  1766.00 |
+|     5 | Nihal    | ME         |  1400.00 |
++-------+----------+------------+----------+
+
+mysql> ROLLBACK TO sp1;
+
+mysql> SELECT * FROM employee;
++-------+----------+------------+----------+
+| empId | empName  | department | salary   |
++-------+----------+------------+----------+
+|     1 | Manikant | CSE        | 50000.00 |
+|     2 | Khushal  | CSE        |  5000.00 |
+|     3 | Manan    | IT         | 50789.00 |
+|     4 | Nikhil   | CSE-R      |  2000.00 |
+|     5 | Nihal    | ME         |  2000.00 |
++-------+----------+------------+----------+
+
+mysql> CREATE USER 'manikant'@'localhost'IDENTIFIED BY 'password';
+
+mysql> GRANT SELECT ON 17aug.* TO 'manikant'@'localhost';
+
+mysql> GRANT INSERT  ON 17aug.* TO 'manikant'@'localhost';
+
+mysql> SHOW GRANTS FOR 'manikant'@'localhost';
++-------------------------------------------------------------+
+| Grants for manikant@localhost                               |
++-------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `manikant`@`localhost`                |
+| GRANT SELECT, INSERT ON `17aug`.* TO `manikant`@`localhost` |
++-------------------------------------------------------------+
+
+mysql> REVOKE INSERT ON 17aug.* FROM 'manikant'@'localhost';
+
+
+mysql> SHOW GRANTS FOR 'manikant'@'localhost';
++-----------------------------------------------------+
+| Grants for manikant@localhost                       |
++-----------------------------------------------------+
+| GRANT USAGE ON *.* TO `manikant`@`localhost`        |
+| GRANT SELECT ON `17aug`.* TO `manikant`@`localhost` |
++-----------------------------------------------------+
+
+

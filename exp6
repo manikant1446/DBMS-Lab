@@ -1,142 +1,94 @@
-mysql> CREATE DATABASE 17aug;
+mysql> CREATE DATABASE BankDB;
 
-mysql> USE 17aug;
+mysql> USE BankDB;
 Database changed
 
-mysql> CREATE TABLE employee
-    -> (empId INT PRIMARY KEY,
-    -> empName VARCHAR(50),
-    -> department VARCHAR(30),
-    -> salary DECIMAL(10,2));
+mysql> CREATE TABLE Account(
+    -> AccNo INT PRIMARY KEY,
+    -> AccName VARCHAR(50),
+    -> Balance DECIMAL(10,2));
 
-mysql> INSERT INTO employee VALUES (1, 'Manikant', 'CSE', 45000.00), (2, 'Khushal', 'CSE', 5000),
-    -> (3, 'Manan', 'IT', 50000.00),
-    -> (4, 'Nikhil', 'CSE-R', 2000),
-    -> (5, 'Nihal', 'ME', 2000);
+mysql> INSERT INTO Account VALUES
+    -> (101,'Manikant',50000),
+    -> (102,'Khushal',30000);
 
-mysql> SELECT * FROM employee;
-+-------+----------+------------+----------+
-| empId | empName  | department | salary   |
-+-------+----------+------------+----------+
-|     1 | Manikant | CSE        | 45000.00 |
-|     2 | Khushal  | CSE        |  5000.00 |
-|     3 | Manan    | IT         | 50000.00 |
-|     4 | Nikhil   | CSE-R      |  2000.00 |
-|     5 | Nihal    | ME         |  2000.00 |
-+-------+----------+------------+----------+
+mysql> SELECT * FROM Account;
++-------+----------+----------+
+| AccNo | AccName  | Balance  |
++-------+----------+----------+
+|   101 | Manikant | 50000.00 |
+|   102 | Khushal  | 30000.00 |
++-------+----------+----------+
 
-mysql> START TRANSACTION;
 
-mysql> UPDATE employee
-    -> SET salary = salary + 5000
-    -> WHERE empId = 1;
+mysql> CREATE USER 'manikant'@'localhost' IDENTIFIED BY '12345678';
 
-mysql> COMMIT;
+mysql> GRANT SELECT, UPDATE ON BankDB.Account TO 'manikant'@'localhost';
 
-mysql> SELECT * FROM employee;
-+-------+----------+------------+----------+
-| empId | empName  | department | salary   |
-+-------+----------+------------+----------+
-|     1 | Manikant | CSE        | 50000.00 |
-|     2 | Khushal  | CSE        |  5000.00 |
-|     3 | Manan    | IT         | 50000.00 |
-|     4 | Nikhil   | CSE-R      |  2000.00 |
-|     5 | Nihal    | ME         |  2000.00 |
-+-------+----------+------------+----------+
+mysql> SHOW GRANTS FOR 'manikant'@'localhost';
+
++----------------------------------------------------------------------+
+| Grants for manikant@localhost                                        |
++----------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `manikant`@`localhost`                         |
+| GRANT SELECT, UPDATE ON `bankdb`.`account` TO `manikant`@`localhost` |
++----------------------------------------------------------------------+
 
 mysql> START TRANSACTION;
 
-mysql> UPDATE employee
-    -> SET salary =salary + 1000
-    -> WHERE empId = 2;
-
-mysql> SELECT * FROM employee;
-+-------+----------+------------+----------+
-| empId | empName  | department | salary   |
-+-------+----------+------------+----------+
-|     1 | Manikant | CSE        | 50000.00 |
-|     2 | Khushal  | CSE        |  6000.00 |
-|     3 | Manan    | IT         | 50000.00 |
-|     4 | Nikhil   | CSE-R      |  2000.00 |
-|     5 | Nihal    | ME         |  2000.00 |
-+-------+----------+------------+----------+
-
-mysql> ROLLBACK;
-
-mysql> SELECT * FROM employee;
-+-------+----------+------------+----------+
-| empId | empName  | department | salary   |
-+-------+----------+------------+----------+
-|     1 | Manikant | CSE        | 50000.00 |
-|     2 | Khushal  | CSE        |  5000.00 |
-|     3 | Manan    | IT         | 50000.00 |
-|     4 | Nikhil   | CSE-R      |  2000.00 |
-|     5 | Nihal    | ME         |  2000.00 |
-+-------+----------+------------+----------+
-
-mysql> START TRANSACTION;
-
-mysql> UPDATE employee
-    -> SET salary =salary + 789
-    -> WHERE empId = 3;
+mysql> UPDATE Account SET Balance = Balance - 5000 WHERE AccNo = 101;
 
 mysql> SAVEPOINT sp1;
 
-mysql> UPDATE employee
-    -> SET salary =salary - 234
-    -> WHERE empId = 4;
+mysql> UPDATE Account SET Balance = Balance + 5000 WHERE AccNo = 102;
 
-mysql> UPDATE employee
-    -> SET salary =salary - 600
-    -> WHERE empId = 5;
-
-mysql> SELECT * FROM employee;
-+-------+----------+------------+----------+
-| empId | empName  | department | salary   |
-+-------+----------+------------+----------+
-|     1 | Manikant | CSE        | 50000.00 |
-|     2 | Khushal  | CSE        |  5000.00 |
-|     3 | Manan    | IT         | 50789.00 |
-|     4 | Nikhil   | CSE-R      |  1766.00 |
-|     5 | Nihal    | ME         |  1400.00 |
-+-------+----------+------------+----------+
+mysql> SELECT * FROM Account;
++-------+----------+----------+
+| AccNo | AccName  | Balance  |
++-------+----------+----------+
+|   101 | Manikant | 45000.00 |
+|   102 | Khushal  | 35000.00 |
++-------+----------+----------+
 
 mysql> ROLLBACK TO sp1;
 
-mysql> SELECT * FROM employee;
-+-------+----------+------------+----------+
-| empId | empName  | department | salary   |
-+-------+----------+------------+----------+
-|     1 | Manikant | CSE        | 50000.00 |
-|     2 | Khushal  | CSE        |  5000.00 |
-|     3 | Manan    | IT         | 50789.00 |
-|     4 | Nikhil   | CSE-R      |  2000.00 |
-|     5 | Nihal    | ME         |  2000.00 |
-+-------+----------+------------+----------+
+mysql> SELECT * FROM Account;
++-------+----------+----------+
+| AccNo | AccName  | Balance  |
++-------+----------+----------+
+|   101 | Manikant | 45000.00 |
+|   102 | Khushal  | 30000.00 |
++-------+----------+----------+
 
-mysql> CREATE USER 'manikant'@'localhost'IDENTIFIED BY 'password';
+mysql> ROLLBACK;
 
-mysql> GRANT SELECT ON 17aug.* TO 'manikant'@'localhost';
+mysql> SELECT * FROM Account;
++-------+----------+----------+
+| AccNo | AccName  | Balance  |
++-------+----------+----------+
+|   101 | Manikant | 50000.00 |
+|   102 | Khushal  | 30000.00 |
++-------+----------+----------+
 
-mysql> GRANT INSERT  ON 17aug.* TO 'manikant'@'localhost';
+mysql> UPDATE Account SET Balance = Balance + 1234 WHERE AccNo = 102;
+
+mysql> COMMIT;
+
+mysql> SELECT * FROM Account;
++-------+----------+----------+
+| AccNo | AccName  | Balance  |
++-------+----------+----------+
+|   101 | Manikant | 50000.00 |
+|   102 | Khushal  | 31234.00 |
++-------+----------+----------+
+
+mysql> REVOKE UPDATE ON BankDB.Account FROM 'manikant'@'localhost';
 
 mysql> SHOW GRANTS FOR 'manikant'@'localhost';
-+-------------------------------------------------------------+
-| Grants for manikant@localhost                               |
-+-------------------------------------------------------------+
-| GRANT USAGE ON *.* TO `manikant`@`localhost`                |
-| GRANT SELECT, INSERT ON `17aug`.* TO `manikant`@`localhost` |
-+-------------------------------------------------------------+
 
-mysql> REVOKE INSERT ON 17aug.* FROM 'manikant'@'localhost';
-
-
-mysql> SHOW GRANTS FOR 'manikant'@'localhost';
-+-----------------------------------------------------+
-| Grants for manikant@localhost                       |
-+-----------------------------------------------------+
-| GRANT USAGE ON *.* TO `manikant`@`localhost`        |
-| GRANT SELECT ON `17aug`.* TO `manikant`@`localhost` |
-+-----------------------------------------------------+
-
-
++--------------------------------------------------------------+
+| Grants for manikant@localhost                                |
++--------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `manikant`@`localhost`                 |
+| GRANT SELECT ON `bankdb`.`account` TO `manikant`@`localhost` |
++--------------------------------------------------------------+

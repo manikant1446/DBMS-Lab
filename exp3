@@ -1,0 +1,151 @@
+
+mysql> create database companyDB;
+mysql> use companyDB;
+
+mysql> create table employee( 
+    -> empID int primary key,
+    -> empName varchar(50),
+    -> department varchar(30),
+    -> salary int,
+    -> age int,
+    -> city varchar(45));
+
+mysql> insert into employee values
+       (101,'Manikant','CSE',79000,21,'jaipur'),
+       (102,'Manan','CSE',6000,20,'jaipur'),
+       (103,'Khushal','CSE',99000,19,'jaipur'),
+       (104,'Kheshav','CSE',87000,20,'jaipur'),
+       (105,'Modi','BJP',150,65,'gujrat'),
+       (106,'Dharmendra','BJP',13,56,'jaipur'),
+       (107,'Nitish','RJD',9400,55,'Bihar'),
+       (108,'Khushraj','CSE',74000,21,'jaipur'),
+       (109,'Nihal','CSE',69000,19,'kota'),
+       (110,'Nikhil','IT',88000,18,'Bikaner');
+
+mysql> select * from employee;
++-------+------------+------------+--------+------+---------+
+| empID | empName    | department | salary | age  | city    |
++-------+------------+------------+--------+------+---------+
+|   101 | Manikant   | CSE        |  79000 |   21 | jaipur  |
+|   102 | Manan      | CSE        |   6000 |   20 | jaipur  |
+|   103 | Khushal    | CSE        |  99000 |   19 | jaipur  |
+|   104 | Kheshav    | CSE        |  87000 |   20 | jaipur  |
+|   105 | Modi       | BJP        |    150 |   65 | gujrat  |
+|   106 | Dharmendra | BJP        |     13 |   56 | jaipur  |
+|   107 | Nitish     | RJD        |   9400 |   55 | Bihar   |
+|   108 | Khushraj   | CSE        |  74000 |   21 | jaipur  |
+|   109 | Nihal      | CSE        |  69000 |   19 | kota    |
+|   110 | Nikhil     | IT         |  88000 |   18 | Bikaner |
++-------+------------+------------+--------+------+---------+
+
+mysql> select * from employee where salary > 50000;
++-------+----------+------------+--------+------+---------+
+| empID | empName  | department | salary | age  | city    |
++-------+----------+------------+--------+------+---------+
+|   101 | Manikant | CSE        |  79000 |   21 | jaipur  |
+|   103 | Khushal  | CSE        |  99000 |   19 | jaipur  |
+|   104 | Kheshav  | CSE        |  87000 |   20 | jaipur  |
+|   108 | Khushraj | CSE        |  74000 |   21 | jaipur  |
+|   109 | Nihal    | CSE        |  69000 |   19 | kota    |
+|   110 | Nikhil   | IT         |  88000 |   18 | Bikaner |
++-------+----------+------------+--------+------+---------+
+
+mysql> select * from employee where age >25;
++-------+------------+------------+--------+------+--------+
+| empID | empName    | department | salary | age  | city   |
++-------+------------+------------+--------+------+--------+
+|   105 | Modi       | BJP        |    150 |   65 | gujrat |
+|   106 | Dharmendra | BJP        |     13 |   56 | jaipur |
+|   107 | Nitish     | RJD        |   9400 |   55 | Bihar  |
++-------+------------+------------+--------+------+--------+
+
+mysql> select * from employee where age=21;
++-------+----------+------------+--------+------+--------+
+| empID | empName  | department | salary | age  | city   |
++-------+----------+------------+--------+------+--------+
+|   101 | Manikant | CSE        |  79000 |   21 | jaipur |
+|   108 | Khushraj | CSE        |  74000 |   21 | jaipur |
++-------+----------+------------+--------+------+--------+
+
+mysql> select * from employee where city='jaipur';
++-------+------------+------------+--------+------+--------+
+| empID | empName    | department | salary | age  | city   |
++-------+------------+------------+--------+------+--------+
+|   101 | Manikant   | CSE        |  79000 |   21 | jaipur |
+|   102 | Manan      | CSE        |   6000 |   20 | jaipur |
+|   103 | Khushal    | CSE        |  99000 |   19 | jaipur |
+|   104 | Kheshav    | CSE        |  87000 |   20 | jaipur |
+|   106 | Dharmendra | BJP        |     13 |   56 | jaipur |
+|   108 | Khushraj   | CSE        |  74000 |   21 | jaipur |
++-------+------------+------------+--------+------+--------+
+
+mysql> update employee
+    -> set salary= 55000
+    -> where empID=104;
+
+mysql> update employee 
+       set salary= 57000 
+       where empID=102;
+
+mysql> select * from employee where salary > 40000 and salary < 60000;
++-------+---------+------------+--------+------+--------+
+| empID | empName | department | salary | age  | city   |
++-------+---------+------------+--------+------+--------+
+|   102 | Manan   | CSE        |  57000 |   20 | jaipur |
+|   104 | Kheshav | CSE        |  55000 |   20 | jaipur |
++-------+---------+------------+--------+------+--------+
+
+mysql> select count(*) as Total_employees from employee;
++-----------------+
+| Total_employees |
++-----------------+
+|              10 |
++-----------------+
+
+mysql> select min(salary) as Minimum_Salary from employee;
++----------------+
+| Minimum_Salary |
++----------------+
+|             13 |
++----------------+
+
+mysql> select max(salary) as Maximum_Salary from employee;
++----------------+
+| Maximum_Salary |
++----------------+
+|          99000 |
++----------------+
+
+mysql> select department,count(*) as Total_Employee from employee group by department;
++------------+----------------+
+| department | Total_Employee |
++------------+----------------+
+| CSE        |              6 |
+| BJP        |              2 |
+| RJD        |              1 |
+| IT         |              1 |
++------------+----------------+
+
+mysql> select age ,count(*) as United_age from employee group by age;
++------+------------+
+| age  | United_age |
++------+------------+
+|   21 |          2 |
+|   20 |          2 |
+|   19 |          2 |
+|   65 |          1 |
+|   56 |          1 |
+|   55 |          1 |
+|   18 |          1 |
++------+------------+
+
+mysql> select city,count(*) as United_by_City from employee group by city;
++---------+----------------+
+| city    | United_by_City |
++---------+----------------+
+| jaipur  |              6 |
+| gujrat  |              1 |
+| Bihar   |              1 |
+| kota    |              1 |
+| Bikaner |              1 |
++---------+----------------+

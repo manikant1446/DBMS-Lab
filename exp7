@@ -1,0 +1,45 @@
+mysql> CREATE DATABASE exp7;
+
+mysql> USE exp7;
+Database changed
+mysql> CREATE TABLE student( studID INT PRIMARY KEY, studName VARCHAR(50), rollNo INT, age INT);
+
+mysql> INSERT INTO student VALUES
+    -> (1, 'Manikant',96,21),
+    -> (2, 'Khushal',83,19),
+    -> (3, 'Manan',95,18),
+    -> (4, 'Manish',97,20),
+    -> (5, 'Nimisha',115, 18);
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE displayStudent()
+    -> BEGIN
+    -> SELECT * FROM student;
+    -> END //
+
+mysql> DELIMITER ;
+mysql> CALL displayStudent();
++--------+----------+--------+------+
+| studID | studName | rollNo | age  |
++--------+----------+--------+------+
+|      1 | Manikant |     96 |   21 |
+|      2 | Khushal  |     83 |   19 |
+|      3 | Manan    |     95 |   18 |
+|      4 | Manish   |     97 |   20 |
+|      5 | Nimisha  |    115 |   18 |
++--------+----------+--------+------+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE getStudent(IN r INT)
+    -> BEGIN
+    -> SELECT * FROM student
+    -> WHERE rollNo = r;
+    -> END //
+
+mysql> DELIMITER ;
+mysql> CALL getStudent(83);
++--------+----------+--------+------+
+| studID | studName | rollNo | age  |
++--------+----------+--------+------+
+|      2 | Khushal  |     83 |   19 |
++--------+----------+--------+------+

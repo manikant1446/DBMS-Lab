@@ -37,9 +37,51 @@ mysql> CREATE PROCEDURE getStudent(IN r INT)
     -> END //
 
 mysql> DELIMITER ;
-mysql> CALL getStudent(83);
+mysql> CALL getStudent(96);
 +--------+----------+--------+------+
 | studID | studName | rollNo | age  |
 +--------+----------+--------+------+
+|    1   | Manikant |   96  |  21   |
++--------+----------+--------+------+
+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE updateAge( IN ID INT , IN AGE INT)
+    -> BEGIN 
+    -> UPDATE student SET age = AGE
+    -> WHERE studID = ID;
+    -> END //
+
+mysql> DELIMITER ;
+mysql> CALL updateAge(1,20);
+
+mysql> SELECT * FROM student;
++--------+----------+--------+------+
+| studID | studName | rollNo | age  |
++--------+----------+--------+------+
+|      1 | Manikant |     96 |   20 |
 |      2 | Khushal  |     83 |   19 |
+|      3 | Manan    |     95 |   18 |
+|      4 | Manish   |     97 |   20 |
+|      5 | Nimisha  |    115 |   18 |
++--------+----------+--------+------+
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE deleteStudent( IN ID INT )
+    -> BEGIN
+    -> DELETE FROM student
+    -> WHERE studID = ID;
+    -> END //
+
+mysql> DELIMITER ;
+mysql> CALL deleteStudent(5);
+
+mysql> SELECT * FROM student;
++--------+----------+--------+------+
+| studID | studName | rollNo | age  |
++--------+----------+--------+------+
+|      1 | Manikant |     96 |   20 |
+|      2 | Khushal  |     83 |   19 |
+|      3 | Manan    |     95 |   18 |
+|      4 | Manish   |     97 |   20 |
 +--------+----------+--------+------+

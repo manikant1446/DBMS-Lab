@@ -1,0 +1,63 @@
+CREATE DATABASE CollegeDB;
+
+USE CollegeDB;
+
+CREATE TABLE Department (
+    Dept_ID INT PRIMARY KEY,
+    Dept_Name VARCHAR(50) NOT NULL
+);
+
+INSERT INTO Department
+VALUES
+(101, 'CSE'),
+(102, 'IT'),
+(103, 'ECE');
+
+SELECT * FROM Department;
+
+CREATE TABLE Student (
+    Student_ID INT PRIMARY KEY,
+    Student_Name VARCHAR(50) NOT NULL,
+    Dept_ID INT,
+    FOREIGN KEY (Dept_ID) REFERENCES Department(Dept_ID)
+);
+
+INSERT INTO Student
+VALUES
+(1, 'Manikant', 101),
+(2, 'Khushal', 102),
+(3, 'Manam', 103);
+
+SELECT * FROM Student;
+
+DELETE FROM Student
+WHERE Dept_ID = 101;
+
+SELECT * FROM Student;
+
+SELECT * FROM Department;
+
+
++---------+-----------+
+| Dept_ID | Dept_Name |
++---------+-----------+
+|   101   | CSE       |
+|   102   | IT        |
+|   103   | ECE       |
++---------+-----------+
+
+
++------------+--------------+---------+
+| Student_ID | Student_Name | Dept_ID |
++------------+--------------+---------+
+|     1      | Manikant     |   101   |
+|     2      | Khushal      |   102   |
+|     3      | Manam        |   103   |
++------------+--------------+---------+
+
++------------+--------------+---------+
+| Student_ID | Student_Name | Dept_ID |
++------------+--------------+---------+
+|     2      | Khushal      |   102   |
+|     3      | Manam        |   103   |
++------------+--------------+---------+

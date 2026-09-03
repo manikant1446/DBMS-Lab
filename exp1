@@ -1,0 +1,52 @@
+CREATE DATABASE College;
+
+USE College;
+
+CREATE TABLE Employee (
+    EmpID INT PRIMARY KEY,
+    EmpName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE,
+    Age INT CHECK (Age >= 18),
+    Salary DECIMAL(10,2) CHECK (Salary > 0)
+);
+
+INSERT INTO Employee (EmpID, EmpName, Email, Age, Salary)VALUES
+(101, 'Manikant', 'manikant@gmail.com', 20,35000),
+(102, 'Khushal', 'khushal@gmail.com', 21, 45000),
+(103, 'Manan', 'manan@gmail.com', 19, 40000);
+
+SELECT * FROM Employee;
+
++-------+----------+---------------------+-----+--
+|EmpID| EmpName | Email             | Age |Salary|
++-------+---------+---------------------+-----+---
+| 101  | Manikan| manikant@gmail.com| 20  | 35000  |
+| 102  | Khushal| khushal@gmail.com | 21  | 45000  |
+| 103  | Manan  | manan@gmail.com   | 19  | 40000  |
++-------+----------+---------------------+-----+--
+
+UPDATE Employee
+SET Salary = 50000
+WHERE EmpID = 102;
+
+SELECT * FROM Employee
+WHERE EmpID = 102;
+
++-------+----------+--------------------+-----+--------+
+| EmpID | EmpName  | Email              | Age | Salary |
++-------+----------+--------------------+-----+--------+
+| 102   | Khushal  | khushal@gmail.com  | 21  | 50000  |
++-------+----------+--------------------+-----+--------+
+
+
+DELETE FROM Employee
+WHERE EmpID = 101;
+
+SELECT * FROM Employee;
+
++-------+---------+--------------------+-----+--------+
+| EmpID | EmpName | Email              | Age | Salary |
++-------+---------+--------------------+-----+--------+
+| 102   | Khushal | khushal@gmail.com  | 21  | 50000  |
+| 103   | Manan   | manan@gmail.com    | 19  | 40000  |
++-------+---------+--------------------+-----+--------+

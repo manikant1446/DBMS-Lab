@@ -1,0 +1,90 @@
+mysql> CREATE DATABASE exp8;
+
+mysql> USE exp8;
+Database changed
+mysql> CREATE TABLE Employee (
+    ->     emp_id INT PRIMARY KEY,
+    ->     emp_name VARCHAR(50),
+    ->     salary DECIMAL(10,2),
+    ->     department VARCHAR(50)
+    -> );
+
+mysql> CREATE TABLE Employee_Audit (
+    ->     audit_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     emp_id INT,
+    ->     action_type VARCHAR(20),
+    ->     old_salary DECIMAL(10,2),
+    ->     new_salary DECIMAL(10,2)
+    -> );
+
+mysql> DELIMITER //
+mysql> CREATE TRIGGER after_employee_insert
+    -> AFTER INSERT ON Employee
+    -> FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO Employee_Audit
+    -> (emp_id, action_type, new_salary)
+    -> VALUES
+    -> (NEW.emp_id, 'INSERT', NEW.salary);
+    -> END //
+mysql> DELIMITER ;
+
+mysql> INSERT INTO Employee
+    -> VALUES(101,'Manikant',5000 ,'CSE');
+
+mysql> SELECT * FROM Employee_Audit;
++----------+--------+-------------+------------+------------+
+| audit_id | emp_id | action_type | old_salary | new_salary |
++----------+--------+-------------+------------+------------+
+|        1 |    101 | INSERT      |       NULL |    5000.00 |
++----------+--------+-------------+------------+------------+
+
+mysql> DELIMITER //
+mysql> CREATE TRIGGER after_employee_update
+    -> AFTER UPDATE ON Employee
+    -> FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO Employee_Audit
+    -> (emp_id, action_type, old_salary, new_salary)
+    -> VALUES
+    -> (NEW.emp_id, 'UPDATE', OLD.salary, NEW.salary);
+    -> END //
+mysql> DELIMITER ;
+
+mysql> UPDATE Employee
+    -> SET salary = 60000
+    -> WHERE emp_id = 101;
+
+mysql> SELECT * FROM Employee_Audit;
++----------+--------+-------------+------------+------------+
+| audit_id | emp_id | action_type | old_salary | new_salary |
++----------+--------+-------------+------------+------------+
+|        1 |    101 | INSERT      |       NULL |    5000.00 |
+|        2 |    101 | UPDATE      |    5000.00 |   60000.00 |
++----------+--------+-------------+------------+------------+
+
+mysql> DELIMITER //
+mysql> CREATE TRIGGER after_employee_delete
+    -> AFTER DELETE ON Employee
+    -> FOR EACH ROW
+    -> BEGIN
+    -> INSERT INTO Employee_Audit
+    -> (emp_id, action_type, old_salary)
+    -> VALUES
+    -> (OLD.emp_id, 'DELETE', OLD.salary);
+    -> END //
+mysql> DELIMITER ;
+
+mysql> DELETE FROM Employee
+    -> WHERE emp_id = 101;
+
+mysql> SELECT * FROM Employee_Audit;
++----------+--------+-------------+------------+------------+
+| audit_id | emp_id | action_type | old_salary | new_salary |
++----------+--------+-------------+------------+------------+
+|        1 |    101 | INSERT      |       NULL |    5000.00 |
+|        2 |    101 | UPDATE      |    5000.00 |   60000.00 |
+|        3 |    101 | DELETE      |   60000.00 |       NULL |
++----------+--------+-------------+------------+------------+
+
+

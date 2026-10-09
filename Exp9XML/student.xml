@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<students xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="student.xsd">
+
+    <student>
+        <student_id>101</student_id>
+        <name>Manikant</name>
+        <age>20</age>
+        <gender>Male</gender>
+        <branch>CSE</branch>
+        <semester>3</semester>
+        <email>manikant@example.com</email>
+    </student>
+
+    <student>
+        <student_id>102</student_id>
+        <name>Khushal</name>
+        <age>18</age>
+        <gender>Male</gender>
+        <branch>ECE</branch>
+        <semester>3</semester>
+        <email>khushal@example.com</email>
+    </student>
+
+    <student>
+        <student_id>103</student_id>
+        <name>Manan</name>
+        <age>17</age>
+        <gender>Female</gender>
+        <branch>CSE</branch>
+        <semester>3</semester>
+        <email>manan@example.com</email>
+    </student>
+
+    <student>
+        <student_id>104</student_id>
+        <name>Manish</name>
+        <age>20</age>
+        <gender>Male</gender>
+        <branch>CSE</branch>
+        <semester>3</semester>
+        <email>manish@example.com</email>
+    </student>
+
+</students>

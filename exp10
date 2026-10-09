@@ -1,0 +1,101 @@
+CREATE DATABASE EmployeeDB;
+
+mysql> USE EmployeeDB;
+
+mysql> CREATE TABLE Employee (
+    ->     EmpID INT PRIMARY KEY,
+    ->     EmpName VARCHAR(50),
+    ->     Department VARCHAR(50),
+    ->     Salary DECIMAL(10,2),
+    ->     City VARCHAR(50)
+    -> );
+
+mysql> INSERT INTO Employee (EmpID, EmpName, Department, Salary, City)
+    -> VALUES
+    -> (1, 'Amit Sharma', 'IT', 45000, 'Jaipur'),
+    -> (2, 'Rahul Verma', 'HR', 35000, 'Delhi'),
+    -> (3, 'Priya Singh', 'IT', 50000, 'Mumbai'),
+    -> (4, 'Neha Gupta', 'Finance', 40000, 'Jaipur'),
+    -> (5, 'Raj Mehta', 'HR', 30000, 'Delhi'),
+    -> (6, 'Anjali Jain', 'IT', 55000, 'Pune'),
+    -> (7, 'Vikas Kumar', 'Sales', 38000, 'Mumbai'),
+    -> (8, 'Sneha Patel', 'Finance', 42000, 'Ahmedabad'),
+    -> (9, 'Rohit Yadav', 'IT', 60000, 'Jaipur'),
+    -> (10, 'Pooja Agarwal', 'HR', 36000, 'Pune');
+
+mysql> SELECT * FROM Employee;
++-------+----------------+------------+----------+------------+
+| EmpID | EmpName        | Department | Salary   | City       |
++-------+----------------+------------+----------+------------+
+|     1 | Amit Sharma    | IT         | 45000.00 | Jaipur     |
+|     2 | Rahul Verma    | HR         | 35000.00 | Delhi      |
+|     3 | Priya Singh    | IT         | 50000.00 | Mumbai     |
+|     4 | Neha Gupta     | Finance    | 40000.00 | Jaipur     |
+|     5 | Raj Mehta      | HR         | 30000.00 | Delhi      |
+|     6 | Anjali Jain    | IT         | 55000.00 | Pune       |
+|     7 | Vikas Kumar    | Sales      | 38000.00 | Mumbai     |
+|     8 | Sneha Patel    | Finance    | 42000.00 | Ahmedabad  |
+|     9 | Rohit Yadav    | IT         | 60000.00 | Jaipur     |
+|    10 | Pooja Agarwal  | HR         | 36000.00 | Pune       |
++-------+----------------+------------+----------+------------+
+
+mysql> CREATE OR REPLACE VIEW IT_Employees AS
+    -> SELECT EmpID, EmpName, Salary, City
+    -> FROM Employee
+    -> WHERE Department = 'IT';
+
+mysql> SELECT * FROM IT_Employees;
++-------+--------------+----------+------------+
+| EmpID | EmpName      | Salary   | City       |
++-------+--------------+----------+------------+
+|     1 | Amit Sharma  | 45000.00 | Jaipur     |
+|     3 | Priya Singh  | 50000.00 | Mumbai     |
+|     6 | Anjali Jain  | 55000.00 | Pune       |
+|     9 | Rohit Yadav  | 60000.00 | Jaipur     |
++-------+--------------+----------+------------+
+
+mysql> CREATE INDEX idx_department
+    -> ON Employee(Department);
+
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Department = 'IT';
++-------+--------------+------------+----------+------------+
+| EmpID | EmpName      | Department | Salary   | City       |
++-------+--------------+------------+----------+------------+
+|     1 | Amit Sharma  | IT         | 45000.00 | Jaipur     |
+|     3 | Priya Singh  | IT         | 50000.00 | Mumbai     |
+|     6 | Anjali Jain  | IT         | 55000.00 | Pune       |
+|     9 | Rohit Yadav  | IT         | 60000.00 | Jaipur     |
++-------+--------------+------------+----------+------------+
+
+mysql> CREATE INDEX idx_salary
+    -> ON Employee(Salary);
+
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Salary > 45000;
++-------+--------------+------------+----------+------------+
+| EmpID | EmpName      | Department | Salary   | City       |
++-------+--------------+------------+----------+------------+
+|     3 | Priya Singh  | IT         | 50000.00 | Mumbai     |
+|     6 | Anjali Jain  | IT         | 55000.00 | Pune       |
+|     9 | Rohit Yadav  | IT         | 60000.00 | Jaipur     |
++-------+--------------+------------+----------+------------+
+
+mysql> SHOW INDEX FROM Employee;
++----------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table    | Non_unique | Key_name       | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++----------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| employee |          0 | PRIMARY        |            1 | EmpID       | A         |          20 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| employee |          1 | idx_department |            1 | Department  | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| employee |          1 | idx_salary     |            1 | Salary      | A         |          20 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++----------+------------+----------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+
+mysql> SELECT COUNT(*) AS Total_Employees
+    -> FROM Employee;
++-----------------+
+| Total_Employees |
++-----------------+
+|              20 |
++-----------------+

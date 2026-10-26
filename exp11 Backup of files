@@ -1,0 +1,68 @@
+CREATE DATABASE IF NOT EXISTS student_db;
+USE student_db;
+
+CREATE TABLE student_profiles (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    dob DATE NOT NULL,
+    enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE = InnoDB;
+
+INSERT INTO student_profiles
+(first_name, last_name, email, dob)
+VALUES
+('Rahul', 'Sharma', 'rahul@university.edu', '2004-05-14'),
+('Priya', 'Patel', 'priya@university.edu', '2003-08-22'),
+('Amit', 'Singh', 'amit@university.edu', '2004-07-01'),
+('Sneha', 'Reddy', 'sneha@university.edu', '2003-12-08');
+
+CREATE TABLE student_academics (
+    record_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    course_name VARCHAR(100) NOT NULL,
+    semester VARCHAR(20) NOT NULL,
+    gpa DECIMAL(3,2) CHECK (gpa BETWEEN 0.00 AND 9.00),
+    FOREIGN KEY (student_id)
+        REFERENCES student_profiles(student_id)
+        ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+INSERT INTO student_academics
+(student_id, course_name, semester, gpa)
+VALUES
+(1, 'DBMS', 'Semester 4', 3.85),
+(2, 'DSA', 'Semester 4', 3.92),
+(3, 'OS', 'Semester 4', 3.40),
+(4, 'CN', 'Semester 4', 3.75);
+
+SELECT
+    p.student_id,
+    p.first_name,
+    p.last_name,
+    p.email,
+    a.course_name,
+    a.semester,
+    a.gpa
+FROM student_profiles AS p
+JOIN student_academics AS a
+ON p.student_id = a.student_id;
+
+-- Count student profiles
+SELECT COUNT(*) AS total_students
+FROM student_profiles;
+
+-- Display student profiles
+SELECT * FROM student_profiles;
+
+-- Display academic records
+SELECT * FROM student_academics;
+
+
+--Esse run karte hai 
+# Create database backup
+mysqldump -u root -p student_db > student_db_backup.sql
+
+# Restore database from backup
+mysql -u root -p student_db < student_db_backup.sql

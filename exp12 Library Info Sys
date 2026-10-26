@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS library;
 USE library;
 
--- Create books table
 CREATE TABLE books (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -11,7 +10,6 @@ CREATE TABLE books (
     available INT NOT NULL DEFAULT 1 CHECK (available >= 0)
 ) ENGINE = InnoDB;
 
--- Create issues table
 CREATE TABLE issues (
     id INT AUTO_INCREMENT PRIMARY KEY,
     book_id INT NOT NULL,
@@ -21,7 +19,6 @@ CREATE TABLE issues (
     FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
--- Insert books
 INSERT INTO books (title, author, isbn, copies, available)
 VALUES
 ('Clean Code', 'Robert Martin', '9780132350884', 3, 3),
@@ -30,35 +27,28 @@ VALUES
 ('Introduction to Algorithms', 'Thomas Cormen',
  '9780262033848', 4, 4);
 
--- Issue a book to a member
 INSERT INTO issues (book_id, member)
 VALUES (1, 'Amit');
 
--- Update available copies after issuing
 UPDATE books
 SET available = available - 1
 WHERE id = 1 AND available > 0;
 
--- Return a book
 UPDATE issues
 SET returned = CURRENT_DATE
 WHERE id = 1 AND returned IS NULL;
 
--- Update available copies after returning
 UPDATE books
 SET available = available + 1
 WHERE id = 1;
 
--- Display all books
 SELECT * FROM books;
 
--- Search books by title or author
 SELECT *
 FROM books
 WHERE title LIKE '%Code%'
    OR author LIKE '%Code%';
 
--- Display books that have not been returned
 SELECT b.title, i.member, i.issued
 FROM issues AS i
 JOIN books AS b

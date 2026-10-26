@@ -1,0 +1,79 @@
+CREATE DATABASE IF NOT EXISTS mall_property_db;
+USE mall_property_db;
+
+CREATE TABLE Owner (
+    owner_id INT PRIMARY KEY,
+    owner_name VARCHAR(50),
+    phone VARCHAR(15)
+);
+
+CREATE TABLE Property (
+    property_id INT PRIMARY KEY,
+    property_name VARCHAR(50),
+    location VARCHAR(50),
+    price DECIMAL(12,2),
+    owner_id INT,
+    FOREIGN KEY (owner_id)
+        REFERENCES Owner(owner_id)
+);
+
+CREATE TABLE Tenant (
+    tenant_id INT PRIMARY KEY,
+    tenant_name VARCHAR(50),
+    phone VARCHAR(15)
+);
+
+CREATE TABLE Rental (
+    rental_id INT PRIMARY KEY,
+    property_id INT,
+    tenant_id INT,
+    rent DECIMAL(10,2),
+    start_date DATE,
+    FOREIGN KEY (property_id)
+        REFERENCES Property(property_id),
+    FOREIGN KEY (tenant_id)
+        REFERENCES Tenant(tenant_id)
+);
+
+INSERT INTO Owner VALUES
+(1, 'Rahul Sharma', '9876543210'),
+(2, 'Priya Verma', '9876543211');
+
+INSERT INTO Property VALUES
+(101, 'Green Villa', 'Jaipur', 5000000, 1),
+(102, 'Sunrise Apartment', 'Delhi', 3500000, 2);
+
+INSERT INTO Tenant VALUES
+(10, 'Amit Singh', '9876543212'),
+(20, 'Neha Gupta', '9876543213');
+
+INSERT INTO Rental VALUES
+(1, 101, 10, 45000, '2026-01-01'),
+(2, 102, 20, 12000, '2026-02-01');
+
+SELECT
+    p.property_name,
+    t.tenant_name,
+    r.rent,
+    r.start_date
+FROM Rental AS r
+JOIN Property AS p
+    ON r.property_id = p.property_id
+JOIN Tenant AS t
+    ON r.tenant_id = t.tenant_id;
+
+SELECT
+    p.property_name,
+    p.location,
+    p.price,
+    o.owner_name
+FROM Property AS p
+JOIN Owner AS o
+    ON p.owner_id = o.owner_id;
+
+SELECT property_name, price
+FROM Property
+WHERE price > 4000000;
+
+SELECT SUM(rent) AS total_monthly_rent
+FROM Rental;

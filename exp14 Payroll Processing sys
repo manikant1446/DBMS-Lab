@@ -1,0 +1,52 @@
+CREATE DATABASE IF NOT EXISTS student_payroll;
+USE student_payroll;
+
+-- Create students table
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    department VARCHAR(30),
+    basic_stipend DECIMAL(10,2)
+);
+
+-- Insert student records
+INSERT INTO students
+(student_id, student_name, department, basic_stipend)
+VALUES
+(101, 'Aarav Sharma', 'CSE', 8000),
+(102, 'Priya Verma', 'IT', 7500),
+(103, 'Rahul Mehta', 'ECE', 8000),
+(104, 'Neha Singh', 'CSE', 7000);
+
+-- Create payroll table
+CREATE TABLE payroll (
+    payroll_id INT PRIMARY KEY,
+    student_id INT,
+    month VARCHAR(20),
+    allowances DECIMAL(10,2),
+    deductions DECIMAL(10,2),
+    net_pay DECIMAL(10,2),
+    payment_status VARCHAR(20),
+    FOREIGN KEY (student_id)
+        REFERENCES students(student_id)
+);
+
+-- Insert payroll records
+INSERT INTO payroll
+(payroll_id, student_id, month, allowances,
+ deductions, net_pay, payment_status)
+VALUES
+(1, 101, 'August', 1000, 500, 8500, 'Paid'),
+(2, 102, 'August', 800, 300, 8000, 'Paid'),
+(3, 103, 'August', 500, 700, 7800, 'Pending'),
+(4, 104, 'August', 600, 200, 7400, 'Paid');
+
+-- Display payroll details
+SELECT
+    s.student_name,
+    p.month,
+    p.net_pay,
+    p.payment_status
+FROM students AS s
+JOIN payroll AS p
+ON s.student_id = p.student_id;

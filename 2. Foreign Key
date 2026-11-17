@@ -15,6 +15,14 @@ VALUES
 
 SELECT * FROM Department;
 
++---------+-----------+
+| Dept_ID | Dept_Name |
++---------+-----------+
+|   101   | CSE       |
+|   102   | IT        |
+|   103   | ECE       |
++---------+-----------+
+
 CREATE TABLE Student (
     Student_ID INT PRIMARY KEY,
     Student_Name VARCHAR(50) NOT NULL,
@@ -30,23 +38,6 @@ VALUES
 
 SELECT * FROM Student;
 
-DELETE FROM Student
-WHERE Dept_ID = 101;
-
-SELECT * FROM Student;
-
-SELECT * FROM Department;
-
-
-+---------+-----------+
-| Dept_ID | Dept_Name |
-+---------+-----------+
-|   101   | CSE       |
-|   102   | IT        |
-|   103   | ECE       |
-+---------+-----------+
-
-
 +------------+--------------+---------+
 | Student_ID | Student_Name | Dept_ID |
 +------------+--------------+---------+
@@ -55,9 +46,24 @@ SELECT * FROM Department;
 |     3      | Manam        |   103   |
 +------------+--------------+---------+
 
+DELETE FROM Student
+WHERE Dept_ID = 101;
+
+SELECT * FROM Student;
+
 +------------+--------------+---------+
 | Student_ID | Student_Name | Dept_ID |
 +------------+--------------+---------+
 |     2      | Khushal      |   102   |
 |     3      | Manam        |   103   |
 +------------+--------------+---------+
+
+SELECT * FROM Department;
+
++---------+-----------+
+| Dept_ID | Dept_Name |
++---------+-----------+
+|   101   | CSE       |
+|   102   | IT        |
+|   103   | ECE       |
++---------+-----------+

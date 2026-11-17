@@ -1,7 +1,6 @@
 mysql> CREATE DATABASE BankDB;
 
 mysql> USE BankDB;
-Database changed
 
 mysql> CREATE TABLE Account(
     -> AccNo INT PRIMARY KEY,
@@ -19,7 +18,6 @@ mysql> SELECT * FROM Account;
 |   101 | Manikant | 50000.00 |
 |   102 | Khushal  | 30000.00 |
 +-------+----------+----------+
-
 
 mysql> CREATE USER 'manikant'@'localhost' IDENTIFIED BY '12345678';
 

@@ -1,7 +1,6 @@
 mysql> CREATE DATABASE 07Aug;
 
 mysql> USE 07Aug;
-Database changed
 
 mysql> CREATE TABLE Department (
     -> Dept_ID INT PRIMARY KEY,
@@ -18,7 +17,6 @@ mysql> INSERT INTO Department VALUES
     ->     (102, 'IT'),
     ->     (103, 'ME');
 
-
 mysql> INSERT INTO Student VALUES
     ->     (1, 'Manikant', 21, 101),
     ->     (2, 'Khushal', 20, 102),
@@ -28,7 +26,6 @@ mysql> INSERT INTO Student VALUES
     ->     (6, 'Nihal', 17, 105),
     ->     (7, 'Krish', 19, 105),
     ->     (8, 'Parth', 18, 106);
-
 
 mysql> SELECT Student.Stud_ID,
     -> Student.Stud_Name,
@@ -44,7 +41,6 @@ mysql> SELECT Student.Stud_ID,
 |       3 | Manan     | ME        |
 +---------+-----------+-----------+
 
-
 mysql> SELECT Student.Stud_ID,
     -> Student.Stud_Name,
     -> Department.Dept_Name
@@ -58,7 +54,6 @@ mysql> SELECT Student.Stud_ID,
 |       3 | Manan     | ME        |
 +---------+-----------+-----------+
 
-
 mysql> SELECT Department.Dept_Name,
     -> COUNT(Student.Stud_ID) AS Total_Students
     -> FROM Student, Department
@@ -71,8 +66,6 @@ mysql> SELECT Department.Dept_Name,
 | IT        |              1 |
 | ME        |              1 |
 +-----------+----------------+
-
-
 
 mysql> SELECT Department.Dept_Name,
     -> MAX(Student.Age) AS Maximum_Age
